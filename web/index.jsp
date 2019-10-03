@@ -4,6 +4,7 @@
     Author     : Aluno
 --%>
 
+<%@page import="javax.swing.JOptionPane"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
@@ -29,18 +30,17 @@
        try {
                  Class.forName("com.mysql.jdbc.Driver");
                  Connection conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/databaso","root","");
-                 String sql = "SELECT nome FROM Cliente WHERE nome   LIKE '"+C.getNome()+"'";
+                 String sql = "insert into cliente (nome,email) values (?,?)" ; 
                  PreparedStatement stmt = conexao.prepareStatement(sql);   // prepara a conexao e passa sql como parametro
-                 ResultSet rs = stmt.executeQuery();
-                 while(rs.next()){String bdlogin = rs.getString("nome");
+                //preenche os valores
+                 stmt.setString(1, C.getNome());
+                 stmt.setString(2, C.getEmail());
+                 //executa
+                 stmt.execute();
+                 stmt.close();
                  
-                 if (bdlogin.equals(C.getNome())) {
-                     
-                     out.println ("Deu certo a comparação");
-                 
-                 }
-                 }
-                 
+                  conexao.close();
+                    
                  
              }catch(SQLException e ){
                  out.println("erro" + e);
